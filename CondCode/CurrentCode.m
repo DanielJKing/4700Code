@@ -4,7 +4,7 @@ clearvars -GLOBAL
 close all
 % set(0,'DefaultFigureWindowStyle','docked')
 global C fc
-%test
+
 addpath ../geom2d/geom2d
 
 C.q_0 = 1.60217653e-19;             % electron charge
