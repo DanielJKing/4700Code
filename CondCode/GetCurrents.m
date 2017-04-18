@@ -1,6 +1,7 @@
 function [ Curr ] = GetCurrents(ngeo, Max, nx, ny, Acond, Bcond, plot, SimType)
 global im fig fc map
-
+%ngeo is number of geometeries. Max is the radius of the geometeries. nx and ny are number of points.
+%Acond and Bcond are conductivities of geometries and surrounding area. simtype c is for circle and simtype e is for ellipse.
 if SimType == 'c'
     pgeo = rand(ngeo, 2);
     pgeo(:, 1) = pgeo(:, 1) * nx;
@@ -48,7 +49,7 @@ end
 
 G = sparse(nx*ny);
 B = zeros(1,nx*ny);
-
+% build G and B matrices
 for i = 1:nx
     for j = 1:ny
         n = j + (i - 1) * ny;
@@ -109,7 +110,7 @@ for i = 1:nx
 end
 
 V = G\B';
-
+%solve potential field and convert into map format for plotting
 Vmap = zeros(nx,ny);
 for i = 1:nx
     for j = 1:ny
@@ -137,10 +138,10 @@ for i = 1:nx
         end
     end
 end
-
+%solve E field by E=-delV. Derivative done discretely by central finite difference
 Ex = -Ex;
 Ey = -Ey;
-
+%J=sigmaE
 eFlowx = cMap .* Ex;
 eFlowy = cMap .* Ey;
 
@@ -173,5 +174,5 @@ end
 C0 = sum(eFlowx(1, :));
 Cnx = sum(eFlowx(nx, :));
 Curr = (C0 + Cnx) * 0.5;
-
+%compute and output total current by summing current density.
 end
